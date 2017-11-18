@@ -27,12 +27,10 @@ class Database(object):
 
         for i in range(1, len(values) + 1):
             subchain = values[:i]
-            print(subchain)
             self.mentions[tuple(subchain)].add(tuple(keychain))
 
         for i in range(1, len(values)):
             subchain = values[i:]
-            print(subchain)
             self.mentions[tuple(subchain)].add(tuple(keychain))
         
         for key in keychain:
@@ -53,5 +51,4 @@ class Database(object):
         print('Added {}'.format(string))
 
     def get(self, string):
-        print('Getting: {}'.format(string))
         print(self._mentions(*string.split(' ')))

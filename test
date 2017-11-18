@@ -3,15 +3,14 @@ from database import Database
 
 def main():
     db = Database()
-
     db.add('a has sides three')
     db.add('a has color green')
-    print(db.get('three'))
-    print(db.get('green'))
-    print(db.get('has color'))
-    print(db.get('has sides'))
-    print(db.get('three'))
-    print(db.get('a'))
+    db.get('three')
+    db.get('green')
+    db.get('has color')
+    db.get('has sides')
+    db.get('three')
+    db.get('a')
 
 if __name__ == '__main__':
     main()
