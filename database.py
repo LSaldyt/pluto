@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 from collections import defaultdict
 
+def _frontchains(chain):
+    for i in range(1, len(chain) + 1):
+        yield tuple(chain[:i])
+
+def _subchains(chain):
+    if len(chain) == 1:
+        return []
+    else:
+        first, *remaining = chain
+        return list(_frontchains(chain)) + [tuple(remaining)] + _subchains(remaining)
+
 class Database(object):
     def __init__(self):
         self.entries  = dict()
@@ -23,18 +34,8 @@ class Database(object):
         keychain = values[:-1]
         value    = values[-1]
 
-        self.mentions[(value,)].add(tuple(keychain))
-
-        for i in range(1, len(values) + 1):
-            subchain = values[:i]
-            self.mentions[tuple(subchain)].add(tuple(keychain))
-
-        for i in range(1, len(values)):
-            subchain = values[i:]
-            self.mentions[tuple(subchain)].add(tuple(keychain))
-        
-        for key in keychain:
-            self.mentions[(key,)].add(tuple(keychain))
+        for subchain in _subchains(values):
+            self.mentions[subchain].add(tuple(keychain))
 
         level = self.entries
         for key in keychain[:-1]:
