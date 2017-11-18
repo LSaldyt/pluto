@@ -1,26 +1,17 @@
 #!/usr/bin/env python3
-from mdict import MultiDictionary
+from database import Database
 
 def main():
-    mdict = MultiDictionary()
+    db = Database()
 
-    mdict.ninsert('a has sides three')
-    mdict.ninsert('a has color green')
-    print(mdict.nmentions('three'))
-    print(mdict.nmentions('green'))
-    print(mdict.nmentions('has color'))
-    print(mdict.nmentions('has sides'))
-    print(mdict.nmentions('three'))
-    print(mdict.nmentions('a'))
-
-    '''
-    mdict.ninsert('a b c d e')
-    mdict.ninsert('a b c f e')
-
-    print(mdict.reverse_lookup('e'))
-    print(mdict.nmentions('a b'))
-    print(mdict.nmentions('c d'))
-    '''
+    db.add('a has sides three')
+    db.add('a has color green')
+    print(db.get('three'))
+    print(db.get('green'))
+    print(db.get('has color'))
+    print(db.get('has sides'))
+    print(db.get('three'))
+    print(db.get('a'))
 
 if __name__ == '__main__':
     main()

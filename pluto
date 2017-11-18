@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+import sys
+import pickle
+
+from database import Database
+
+commands = '''
+pluto init [optional filename]       # Create a database file in the current directory
+pluto add  [optional filename] *args # Add keychain:value to the database file
+pluto get  [optional filename] *args # Get keychains that reference the value or keychain *args
+'''
+
+DefaultPlutoFilename = '.pluto.db'
+
+def main(args):
+    if '-h' in args or '--help' in args:
+        print('Select a subcommand of pluto to run:')
+        print(commands)
+        return 0
+
+    assert len(args) > 0, 'Not enough arguments given to pluto'
+    subcommand, *args = args
+    if len(args) > 0 and args[0].endswith('.db'):
+        filename = first
+        args = args[1:]
+    else:
+        filename = DefaultPlutoFilename
+    if subcommand == 'init':
+        database = Database()
+        print('Initialized empty pluto database')
+    else:
+        with open(filename, 'rb') as infile:
+            database = pickle.load(infile)
+        if not hasattr(database, subcommand):
+            raise ValueError('Invalid subcommand: {}'.format(subcommand))
+        subfunction = getattr(database, subcommand)
+        if not callable(subfunction):
+            raise ValueError('Invalid subcommand: {}'.format(subcommand))
+        subfunction(' '.join(args))
+    with open(filename, 'wb') as outfile:
+        pickle.dump(database, outfile)
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
