@@ -4,13 +4,23 @@ from mdict import MultiDictionary
 def main():
     mdict = MultiDictionary()
 
-    mdict.insert('a', 'b', 'c', 'd', 'e')
-    mdict.insert('a', 'b', 'c', 'f', 'e')
+    mdict.ninsert('a has sides three')
+    mdict.ninsert('a has color green')
+    print(mdict.nmentions('three'))
+    print(mdict.nmentions('green'))
+    print(mdict.nmentions('has color'))
+    print(mdict.nmentions('has sides'))
+    print(mdict.nmentions('three'))
+    print(mdict.nmentions('a'))
+
+    '''
+    mdict.ninsert('a b c d e')
+    mdict.ninsert('a b c f e')
 
     print(mdict.reverse_lookup('e'))
-    print(mdict.keychain_mentions('b'))
-    print(mdict.keychain_mentions('a', 'b'))
-    print(mdict.keychain_mentions('c', 'd'))
+    print(mdict.nmentions('a b'))
+    print(mdict.nmentions('c d'))
+    '''
 
 if __name__ == '__main__':
     main()

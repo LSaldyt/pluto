@@ -13,14 +13,10 @@ class MultiDictionary(object):
 
     def __init__(self):
         self.entries  = dict()
-        self.reverse  = defaultdict(list)
-        self.mentions = defaultdict(list)
+        self.mentions = defaultdict(set)
 
     def lookup(self, keychain):
         return _keychain_lookup(self.entries, keychain)
-
-    def reverse_lookup(self, value):
-        return self.reverse[value]
 
     def keychain_mentions(self, *keys):
         return self.mentions[tuple(keys)]
@@ -30,18 +26,18 @@ class MultiDictionary(object):
         keychain = values[:-1]
         value    = values[-1]
 
-        self.reverse[value].append(tuple(keychain))
+        self.mentions[(value,)].add(tuple(keychain))
 
         for i in range(1, len(keychain) + 1):
             subchain = keychain[:i]
-            self.mentions[tuple(subchain)].append(tuple(keychain))
+            self.mentions[tuple(subchain)].add(tuple(keychain))
 
         for i in range(len(keychain)):
             subchain = keychain[i:]
-            self.mentions[tuple(subchain)].append(tuple(keychain))
+            self.mentions[tuple(subchain)].add(tuple(keychain))
         
         for key in keychain:
-            self.mentions[(key,)].append(tuple(keychain))
+            self.mentions[(key,)].add(tuple(keychain))
 
         level = self.entries
         for key in keychain[:-1]:
@@ -53,12 +49,9 @@ class MultiDictionary(object):
         key = keychain[-1]
         level[key] = value
 
-if __name__ == '__main__':
-    mdict = MultiDictionary()
-    mdict.insert('a', 'b', 'c', 'd', 'e')
-    mdict.insert('a', 'b', 'c', 'f', 'e')
+    def ninsert(self, string):
+        self.insert(*string.split(' '))
 
-    print(mdict.reverse_lookup('e'))
-    print(mdict.keychain_mentions('b'))
-    print(mdict.keychain_mentions('a', 'b'))
-    print(mdict.keychain_mentions('c', 'd'))
+    def nmentions(self, string):
+        return self.keychain_mentions(*string.split(' '))
+
