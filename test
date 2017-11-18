@@ -3,13 +3,14 @@ from mdict import MultiDictionary
 
 def main():
     mdict = MultiDictionary()
-    mdict.insert(['a', 'b', 'c', 'd'], 'e')
-    mdict.insert(['a', 'b', 'c', 'f'], 'e')
+
+    mdict.insert('a', 'b', 'c', 'd', 'e')
+    mdict.insert('a', 'b', 'c', 'f', 'e')
 
     print(mdict.reverse_lookup('e'))
     print(mdict.keychain_mentions('b'))
-    print(mdict.keychain_mentions(['a', 'b']))
-    print(mdict.keychain_mentions(['c', 'd']))
+    print(mdict.keychain_mentions('a', 'b'))
+    print(mdict.keychain_mentions('c', 'd'))
 
 if __name__ == '__main__':
     main()
