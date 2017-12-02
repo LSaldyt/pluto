@@ -30,7 +30,7 @@ class Database(object):
     def _mentions(self, *keys):
         return self.mentions[tuple(keys)]
 
-    def _insert(self, *values):
+    def _get_level_key(self, *values):
         assert len(values) > 1, 'Cannot insert without at least one key and one value'
         keychain = values[:-1]
         value    = values[-1]
@@ -46,7 +46,16 @@ class Database(object):
                 raise ValueError('Cannot insert past already-terminal keychain: {}'.format(key))
             level = level[key]
         key = keychain[-1]
-        level[key] = value
+        return level, key
+
+    def _insert(self, *values):
+        level, key = self._get_level_key(*values)
+        level[key] = values[-1]
+
+    def clear(self, string):
+        level, key = self._get_level_key(*string.split())
+        level[key] = dict()
+        print('Cleared {}'.format(string))
 
     def add(self, string):
         self._insert(*string.split(' '))
@@ -63,6 +72,12 @@ class Database(object):
         sets = [{keychain[0] for keychain in mentions} for mentions in sets] 
         print(set.intersection(*sets))
         return set.intersection(*sets)
+
+    def select(self, string):
+        result = self.find(string)
+        if len(result) != 1:
+            raise ValueError('Query {} could not be resolved')
+        return list(result)[0]
 
     def view(self):
         print('Viewing database:')

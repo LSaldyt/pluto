@@ -1,0 +1,41 @@
+0 isa block
+0 has color red
+0 has size large
+0 has location on table
+0 has location behind 1
+
+1 isa cube
+1 has size small
+1 has color red
+1 has location on table
+
+2 isa pyramid
+2 has color red
+2 has size small
+2 has location on 1
+
+4 isa block
+4 has color blue
+4 has size tall
+4 has location on table
+
+5 isa block
+5 has color green
+5 has location on table
+
+6 isa block
+6 has color green
+6 has location on table
+6 has location in-front 5
+
+7 isa box
+7 has color white
+7 has location on table
+
+8 isa pyramid
+8 has size tall
+8 has location on 6
+
+9 isa pyramid
+9 has size wide
+9 has location in 7

@@ -1,101 +1,112 @@
-#!/bin/bash
+#!/usr/bin/env python3
+import pickle
 
 # Model of semantic database operations underlying SHRDLU
 
-# Person: PICK UP A BIG RED BLOCK. 
-./pluto find blockworld.db block, large, red
-# Computer: OK. (does it) 
+def main():
+    with open('blockworld.db', 'rb') as infile:
+        db = pickle.load(infile)
 
-# Person: GRASP *THE* PYRAMID. 
-./pluto find blockworld.db pyramid
-# Computer: I DON'T UNDERSTAND WHICH PYRAMID YOU MEAN. (There are 3)
+    # Person: PICK UP A BIG RED BLOCK. 
+    db.find('block, large, red')
+    # Computer: OK. (does it) 
 
-# Person: FIND A BLOCK WHICH IS TALLER THAN THE ONE YOU ARE HOLDING AND PUT IT INTO THE BOX. 
-# > [block, condition{taller-than([holding])}]
-# [4]
-# > move([4], [box])
+    # Person: GRASP *THE* PYRAMID. 
+    db.find('pyramid')
+    # Computer: I DON'T UNDERSTAND WHICH PYRAMID YOU MEAN. (There are 3)
 
-# Computer: BY "IT", I ASSUME YOU MEAN THE BLOCK WHICH IS TALLER THAN THE ONE I AM HOLDING. 
-# Computer: OK. (does it) 
+    # Person: FIND A BLOCK WHICH IS TALLER THAN THE ONE YOU ARE HOLDING AND PUT IT INTO THE BOX. 
+    # > [block, condition{taller-than([holding])}]
+    # [4]
+    # > move([4], [box])
+    db.clear('4 has location')
+    box = db.select('isa box')
+    db.add('4 has location in {}'.format(box))
+    #db.view()
 
-# Person: WHAT DOES THE BOX CONTAIN? 
-./pluto find blockworld.db box
-./pluto find blockworld.db location in 7
+    # Computer: BY "IT", I ASSUME YOU MEAN THE BLOCK WHICH IS TALLER THAN THE ONE I AM HOLDING. 
+    # Computer: OK. (does it) 
 
-# Computer: THE BLUE PYRAMID AND THE BLUE BLOCK. 
-# Person: WHAT IS THE PYRAMID SUPPORTED BY? 
+    # Person: WHAT DOES THE BOX CONTAIN? 
+    db.find('location in {}'.format(box))
 
-# (returned)> [pyramid]
-# [9]
+    # Computer: THE BLUE PYRAMID AND THE BLUE BLOCK. 
+    # Person: WHAT IS THE PYRAMID SUPPORTED BY? 
 
-# supported -> on -> [on] -> [box]
+    # (returned)> [pyramid]
+    # [9]
 
-# Computer: THE BOX. 
+    # supported -> on -> [on] -> [box]
 
-# Person: HOW MANY BLOCKS ARE NOT IN THE BOX? 
-# > [block, not{location in [box]}]
-# Computer: FOUR OF THEM. 
+    # Computer: THE BOX. 
 
-# Person: IS AT LEAST ONE OF THEM NARROWER THAN THE ONE WHICH I TOLD YOU TO PICK UP? 
-# (returned)> [size...]
+    # Person: HOW MANY BLOCKS ARE NOT IN THE BOX? 
+    # > [block, not{location in [box]}]
+    # Computer: FOUR OF THEM. 
 
-# ...
-# Computer: YES, THE RED CUBE. 
-# Person: IS IT SUPPORTED? 
-# Computer: YES, BY THE TABLE. 
-# Person: CAN THE TABLE PICK UP BLOCKS? 
-# Computer: NO. 
-# Person: CAN A PYRAMID BE SUPPORTED BY A BLOCK? 
-# Computer: YES. 
-# Person: CAN A PYRAMID SUPPORT A PYRAMID? 
-# Computer: I DON'T KNOW. 
-# Person: STACK UP TWO PYRAMIDS. 
-# Computer: I CAN'T. 
-# Person: WILL YOU PLEASE STACK UP BOTH OF THE RED BLOCKS AND EITHER A GREEN CUBE OR A PYRAMID? 
-# Computer: OK. (does it) 
-# Person: WHICH CUBE IS SITTING ON THE TABLE? 
-# Computer: THE LARGE GREEN ONE WHICH SUPPORTS THE RED PYRAMID. 
-# Person: IS THERE A LARGE BLOCK BEHIND A PYRAMID? 
-# Computer: YES, THREE OF THEM: A LARGE RED ONE, A LARGE GREEN CUBE, AND THE BLUE ONE. 
-# Person: PUT A SMALL ONE ONTO THE GREEN CUBE WHICH SUPPORTS A PYRAMID. 
-# Computer: OK. (does it) 
-# Person: PUT THE LITTLEST PYRAMID ON TOP OF IT. 
-# Computer: OK. (does it) 
-# Person: DOES THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS SUPPORT ANYTHING GREEN? 
-# Computer: YES, THE GREEN PYRAMID. 
-# Person: WHAT COLOR IS IT? 
-# Computer: BY "IT", I ASSUME YOU MEAN THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS. 
-# Computer: RED 
-# Person: HOW MANY THINGS ARE ON TOP OF GREEN CUBES? 
-# Computer: I'M NOT SURE WHAT YOU MEAN BY "ON TOP OF "IN THE PHRASE "ON TOP OF GREEN CUBES " . 
-#  DO YOU MEAN:
+    # Person: IS AT LEAST ONE OF THEM NARROWER THAN THE ONE WHICH I TOLD YOU TO PICK UP? 
+    # (returned)> [size...]
 
-#     1 - DIRECTLY ON THE SURFACE 
-#     2 - ANWHERE ON TOP OF ? 
+    # ...
+    # Computer: YES, THE RED CUBE. 
+    # Person: IS IT SUPPORTED? 
+    # Computer: YES, BY THE TABLE. 
+    # Person: CAN THE TABLE PICK UP BLOCKS? 
+    # Computer: NO. 
+    # Person: CAN A PYRAMID BE SUPPORTED BY A BLOCK? 
+    # Computer: YES. 
+    # Person: CAN A PYRAMID SUPPORT A PYRAMID? 
+    # Computer: I DON'T KNOW. 
+    # Person: STACK UP TWO PYRAMIDS. 
+    # Computer: I CAN'T. 
+    # Person: WILL YOU PLEASE STACK UP BOTH OF THE RED BLOCKS AND EITHER A GREEN CUBE OR A PYRAMID? 
+    # Computer: OK. (does it) 
+    # Person: WHICH CUBE IS SITTING ON THE TABLE? 
+    # Computer: THE LARGE GREEN ONE WHICH SUPPORTS THE RED PYRAMID. 
+    # Person: IS THERE A LARGE BLOCK BEHIND A PYRAMID? 
+    # Computer: YES, THREE OF THEM: A LARGE RED ONE, A LARGE GREEN CUBE, AND THE BLUE ONE. 
+    # Person: PUT A SMALL ONE ONTO THE GREEN CUBE WHICH SUPPORTS A PYRAMID. 
+    # Computer: OK. (does it) 
+    # Person: PUT THE LITTLEST PYRAMID ON TOP OF IT. 
+    # Computer: OK. (does it) 
+    # Person: DOES THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS SUPPORT ANYTHING GREEN? 
+    # Computer: YES, THE GREEN PYRAMID. 
+    # Person: WHAT COLOR IS IT? 
+    # Computer: BY "IT", I ASSUME YOU MEAN THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS. 
+    # Computer: RED 
+    # Person: HOW MANY THINGS ARE ON TOP OF GREEN CUBES? 
+    # Computer: I'M NOT SURE WHAT YOU MEAN BY "ON TOP OF "IN THE PHRASE "ON TOP OF GREEN CUBES " . 
+    #  DO YOU MEAN:
 
-# Person: 2 
-# Computer: THREE OF THEM. 
-# Person: HAD YOU TOUCHED ANY PYRAMID BEFORE YOU PUT THE GREEN ONE ON THE LITTLE CUBE? 
-# Computer: YES, THE GREEN ONE. 
-# Person: WHEN DID YOU PICK IT UP? 
-# Computer: WHILE I WAS STACKING UP THE RED CUBE, A LARGE RED BLOCK AND A LARGE GREEN CUBE. 
-# Person: WHY? 
-# Computer: TO GET RID OF IT. 
-# Person: WHY DID YOU DO THAT? 
-# Computer: TO CLEAN OFF THE RED CUBE. 
-# Person: WHY DID YOU CLEAR OFF THAT CUBE? 
-# Computer: TO PUT IT ON A LARGE GREEN CUBE. 
-# Person: WHY DID YOU DO THAT? 
-# Computer: TO STACK UP THE RED CUBE , A LARGE RED BLOCK AND A LARGE GREEN CUBE. 
-# Person: WHY DID YOU DO THAT? 
-# Computer: BECAUSE YOU ASKED ME TO. 
-# Person: HOW DID YOU DO IT? 
-# Computer: BY PUTTING A LARGE RED BLOCK ON THE TABLE ; THEN LETTING GO OF IT ; THEN PUTTING A LARGE GREEN CUBE ON IT ; THEN LETTING GO OF THAT CUBE ; THEN PUTTING THE RED CUBE ON THAT CUBE; THEN LETTING GO OF THAT CUBE. 
-# Person: HOW MANY OBJECTS DID YOU TOUCH WHILE YOU WERE DOING IT? 
-# Computer: FOUR OF THEM. 
-# Person: WHAT DID THE RED CUBE SUPPORT BEFORE YOU STARTED TO CLEAN IT OFF? 
-# Computer: THE GREEN PYRAMID. 
-# Person: THERE WERE FIVE BLOCKS TO THE LEFT OF THE BOX THEN. 
-# Computer: NO, ONLY FOUR OF THEM: THE RED CUBE, TWO LARGE GREEN CUBES AND A LARGE RED BLOCK. 
-# Person: PUT THE BLUE PYRAMID ON THE BLOCK IN THE BOX. 
-# Computer: OK. (does it) 
+    #     1 - DIRECTLY ON THE SURFACE 
+    #     2 - ANWHERE ON TOP OF ? 
+
+    # Person: 2 
+    # Computer: THREE OF THEM. 
+    # Person: HAD YOU TOUCHED ANY PYRAMID BEFORE YOU PUT THE GREEN ONE ON THE LITTLE CUBE? 
+    # Computer: YES, THE GREEN ONE. 
+    # Person: WHEN DID YOU PICK IT UP? 
+    # Computer: WHILE I WAS STACKING UP THE RED CUBE, A LARGE RED BLOCK AND A LARGE GREEN CUBE. 
+    # Person: WHY? 
+    # Computer: TO GET RID OF IT. 
+    # Person: WHY DID YOU DO THAT? 
+    # Computer: TO CLEAN OFF THE RED CUBE. 
+    # Person: WHY DID YOU CLEAR OFF THAT CUBE? 
+    # Computer: TO PUT IT ON A LARGE GREEN CUBE. 
+    # Person: WHY DID YOU DO THAT? 
+    # Computer: TO STACK UP THE RED CUBE , A LARGE RED BLOCK AND A LARGE GREEN CUBE. 
+    # Person: WHY DID YOU DO THAT? 
+    # Computer: BECAUSE YOU ASKED ME TO. 
+    # Person: HOW DID YOU DO IT? 
+    # Computer: BY PUTTING A LARGE RED BLOCK ON THE TABLE ; THEN LETTING GO OF IT ; THEN PUTTING A LARGE GREEN CUBE ON IT ; THEN LETTING GO OF THAT CUBE ; THEN PUTTING THE RED CUBE ON THAT CUBE; THEN LETTING GO OF THAT CUBE. 
+    # Person: HOW MANY OBJECTS DID YOU TOUCH WHILE YOU WERE DOING IT? 
+    # Computer: FOUR OF THEM. 
+    # Person: WHAT DID THE RED CUBE SUPPORT BEFORE YOU STARTED TO CLEAN IT OFF? 
+    # Computer: THE GREEN PYRAMID. 
+    # Person: THERE WERE FIVE BLOCKS TO THE LEFT OF THE BOX THEN. 
+    # Computer: NO, ONLY FOUR OF THEM: THE RED CUBE, TWO LARGE GREEN CUBES AND A LARGE RED BLOCK. 
+    # Person: PUT THE BLUE PYRAMID ON THE BLOCK IN THE BOX. 
+    # Computer: OK. (does it) 
+
+if __name__ == '__main__':
+    main()
