@@ -4,6 +4,7 @@
 ./pluto add blockworld.db "0" has color red
 ./pluto add blockworld.db "0" has size large
 ./pluto add blockworld.db "0" has location on table
+./pluto add blockworld.db "0" has location behind "1"
 
 ./pluto add blockworld.db "1" isa cube
 ./pluto add blockworld.db "1" has size small
@@ -14,12 +15,6 @@
 ./pluto add blockworld.db "2" has color red
 ./pluto add blockworld.db "2" has size small
 ./pluto add blockworld.db "2" has location on "1"
-
-./pluto add blockworld.db "3" isa block
-./pluto add blockworld.db "3" has color red
-./pluto add blockworld.db "3" has size large
-./pluto add blockworld.db "3" has location on table
-./pluto add blockworld.db "3" has location behind "1"
 
 ./pluto add blockworld.db "4" isa block
 ./pluto add blockworld.db "4" has color blue

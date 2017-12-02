@@ -53,7 +53,17 @@ class Database(object):
         print('Added {}'.format(string))
 
     def get(self, string):
+        print('Getting {}'.format(string))
         print(self._mentions(*string.split(' ')))
+        return self._mentions(*string.split(' '))
+
+    def find(self, string):
+        print('Finding {}'.format(string))
+        sets = [self._mentions(*s.strip().split(' ')) for s in string.split(',')] 
+        sets = [{keychain[0] for keychain in mentions} for mentions in sets] 
+        print(set.intersection(*sets))
+        return set.intersection(*sets)
 
     def view(self):
+        print('Viewing database:')
         pprint(self.entries)
