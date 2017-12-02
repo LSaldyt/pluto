@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from collections import defaultdict
+from pprint import pprint
 
 def _frontchains(chain):
     for i in range(1, len(chain) + 1):
@@ -53,3 +54,6 @@ class Database(object):
 
     def get(self, string):
         print(self._mentions(*string.split(' ')))
+
+    def view(self):
+        pprint(self.entries)

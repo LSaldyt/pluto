@@ -8,6 +8,7 @@ commands = '''
 pluto init [optional filename]       # Create a database file in the current directory
 pluto add  [optional filename] *args # Add keychain:value to the database file
 pluto get  [optional filename] *args # Get keychains that reference the value or keychain *args
+pluto view [optional filename]       # view a database
 '''
 
 DefaultPlutoFilename = '.pluto.db'
@@ -21,7 +22,7 @@ def main(args):
     assert len(args) > 0, 'Not enough arguments given to pluto'
     subcommand, *args = args
     if len(args) > 0 and args[0].endswith('.db'):
-        filename = first
+        filename = args[0]
         args = args[1:]
     else:
         filename = DefaultPlutoFilename
@@ -36,7 +37,10 @@ def main(args):
         subfunction = getattr(database, subcommand)
         if not callable(subfunction):
             raise ValueError('Invalid subcommand: {}'.format(subcommand))
-        subfunction(' '.join(args))
+        if len(args) == 0:
+            subfunction()
+        else:
+            subfunction(' '.join(args))
     with open(filename, 'wb') as outfile:
         pickle.dump(database, outfile)
     return 0

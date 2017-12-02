@@ -1,0 +1,144 @@
+# A hypothetical test of the shrdlu program using the pluto database
+
+# A large red block on the table
+# 
+# a small red cube on the table
+# a green pyramid on the small red cube
+# 
+# the large red block is behind the small red cube
+# 
+# a large blue block on the table
+# two green cubes on the table
+# one green cube is in front of the other green cube
+# 
+# a white box on the table
+# a tall red pyramid on the green cube in front
+# 
+# a wide blue pyramid is in the box
+
+add 0 isa block
+add 0 has color red
+add 0 has size large
+add 0 has location on table
+
+add 1 isa cube
+add 1 has size small
+add 1 has location on table
+
+add 2 isa pyramid
+add 2 has color red
+add 2 has size small
+add 2 has location on [small red cube]
+
+add 3 isa block
+add 3 has color red
+add 3 has size large
+add 3 has location on table
+add 3 has location behind [small red cube]
+
+add 4 isa block
+add 4 has color blue
+add 4 has size tall
+add 4 has location on table
+
+add 5 isa block
+add 5 has color green
+add 5 has location on table
+
+add 6 isa block
+add 6 has color green
+add 6 has location on table
+add 6 has location in-front [5]
+
+add 7 isa box
+add 7 has color white
+add 7 has location on table
+
+add 8 isa pyramid
+add 8 has size tall
+add 8 has location on [6]
+
+add 9 isa pyramid
+add 9 has size wide
+add 9 has location in [box]
+
+# Person: PICK UP A BIG RED BLOCK. 
+
+> [red, block, large]
+[3]
+# Computer: OK. (does it) 
+
+# Person: GRASP *THE* PYRAMID. 
+> [pyramid]
+[2, 8, 9]
+# Computer: I DON'T UNDERSTAND WHICH PYRAMID YOU MEAN. (There are 3)
+
+# Person: FIND A BLOCK WHICH IS TALLER THAN THE ONE YOU ARE HOLDING AND PUT IT INTO THE BOX. 
+> [block, condition{taller-than([holding])}]
+[4]
+> move([4], [box])
+
+# Computer: BY "IT", I ASSUME YOU MEAN THE BLOCK WHICH IS TALLER THAN THE ONE I AM HOLDING. 
+# Computer: OK. (does it) 
+
+# Person: WHAT DOES THE BOX CONTAIN? 
+> [location: {in : [box]}]
+[4, 9]
+
+# Computer: THE BLUE PYRAMID AND THE BLUE BLOCK. 
+# Person: WHAT IS THE PYRAMID SUPPORTED BY? 
+
+(returned)> [pyramid]
+[9]
+
+supported -> on -> [on] -> [box]
+
+# Computer: THE BOX. 
+
+# Person: HOW MANY BLOCKS ARE NOT IN THE BOX? 
+> [block, not{location in [box]}]
+# Computer: FOUR OF THEM. 
+
+# Person: IS AT LEAST ONE OF THEM NARROWER THAN THE ONE WHICH I TOLD YOU TO PICK UP? 
+(returned)> [size...]
+
+...
+# Computer: YES, THE RED CUBE. 
+# Person: IS IT SUPPORTED? 
+# Computer: YES, BY THE TABLE. 
+# Person: CAN THE TABLE PICK UP BLOCKS? 
+# Computer: NO. 
+# Person: CAN A PYRAMID BE SUPPORTED BY A BLOCK? 
+# Computer: YES. 
+# Person: CAN A PYRAMID SUPPORT A PYRAMID? 
+# Computer: I DON'T KNOW. 
+# Person: STACK UP TWO PYRAMIDS. 
+# Computer: I CAN'T. 
+# Person: WILL YOU PLEASE STACK UP BOTH OF THE RED BLOCKS AND EITHER A GREEN CUBE OR A PYRAMID? 
+# Computer: OK. (does it) 
+# Person: WHICH CUBE IS SITTING ON THE TABLE? 
+# Computer: THE LARGE GREEN ONE WHICH SUPPORTS THE RED PYRAMID. 
+# Person: IS THERE A LARGE BLOCK BEHIND A PYRAMID? 
+# Computer: YES, THREE OF THEM: A LARGE RED ONE, A LARGE GREEN CUBE, AND THE BLUE ONE. 
+# Person: PUT A SMALL ONE ONTO THE GREEN CUBE WHICH SUPPORTS A PYRAMID. 
+# Computer: OK. (does it) 
+# Person: PUT THE LITTLEST PYRAMID ON TOP OF IT. 
+# Computer: OK. (does it) 
+# Person: DOES THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS SUPPORT ANYTHING GREEN? 
+# Computer: YES, THE GREEN PYRAMID. 
+# Person: WHAT COLOR IS IT? 
+# Computer: BY "IT", I ASSUME YOU MEAN THE SHORTEST THING THE TALLEST PYRAMID'S SUPPORT SUPPORTS. 
+# Computer: RED 
+# Person: HOW MANY THINGS ARE ON TOP OF GREEN CUBES? 
+# Computer: I'M NOT SURE WHAT YOU MEAN BY "ON TOP OF "IN THE PHRASE "ON TOP OF GREEN CUBES " . 
+#  DO YOU MEAN:
+# 
+#     1 - DIRECTLY ON THE SURFACE 
+#     2 - ANWHERE ON TOP OF ? 
+# 
+# Person: 2 
+# Computer: THREE OF THEM. 
+# Person: HAD YOU TOUCHED ANY PYRAMID BEFORE YOU PUT THE GREEN ONE ON THE LITTLE CUBE? 
+# Computer: YES, THE GREEN ONE. 
+# Person: WHEN DID YOU PICK IT UP? 
+# ...
