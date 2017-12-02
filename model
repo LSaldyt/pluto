@@ -19,8 +19,8 @@
 # Computer: OK. (does it) 
 
 # Person: WHAT DOES THE BOX CONTAIN? 
-# > [location: {in : [box]}]
-# [4, 9]
+./pluto find blockworld.db box
+./pluto find blockworld.db location in 7
 
 # Computer: THE BLUE PYRAMID AND THE BLUE BLOCK. 
 # Person: WHAT IS THE PYRAMID SUPPORTED BY? 
