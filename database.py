@@ -66,17 +66,20 @@ class Database(object):
         print(self._mentions(*string.split(' ')))
         return self._mentions(*string.split(' '))
 
-    def find(self, string):
+    def find(self, string, filt=None):
         print('Finding {}'.format(string))
         sets = [self._mentions(*s.strip().split(' ')) for s in string.split(',')] 
         sets = [{keychain[0] for keychain in mentions} for mentions in sets] 
-        print(set.intersection(*sets))
-        return set.intersection(*sets)
+        found = set.intersection(*sets)
+        print(found)
+        if filt is not None:
+            found = {item for item in found if filt(item)}
+        return found
 
     def select(self, string):
         result = self.find(string)
         if len(result) != 1:
-            raise ValueError('Query {} could not be resolved')
+            raise ValueError('Query "{}" could not be resolved'.format(string))
         return list(result)[0]
 
     def view(self):

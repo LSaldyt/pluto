@@ -1,6 +1,7 @@
 0 isa block
 0 has color red
 0 has size large
+0 has height 4
 0 has location on table
 0 has location behind 1
 
@@ -17,14 +18,19 @@
 4 isa block
 4 has color blue
 4 has size tall
+4 has height 5
 4 has location on table
 
 5 isa block
 5 has color green
+5 has height 3
+4 has size medium
 5 has location on table
 
 6 isa block
 6 has color green
+6 has size medium
+6 has height 3
 6 has location on table
 6 has location in-front 5
 

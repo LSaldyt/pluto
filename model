@@ -6,6 +6,7 @@ import pickle
 def main():
     with open('blockworld.db', 'rb') as infile:
         db = pickle.load(infile)
+    db.view()
 
     # Person: PICK UP A BIG RED BLOCK. 
     db.find('block, large, red')
@@ -19,6 +20,13 @@ def main():
     # > [block, condition{taller-than([holding])}]
     # [4]
     # > move([4], [box])
+
+    # db.define('taller-than a, b = a:has:height > b:has:height')
+    # db.define('taller-than a, b = get(a has height)> get(b has height)')
+    # db.define('taller-than = lambda a, b : float(self.get('{} has height'.format(a))) > float(self.get('{} has height'.format(b)))')
+
+    holding = db.select('block, large, red')
+    db.find('block', lambda a : float(db.select('{} has height'.format(a))) > float(db.select('{} has height'.format(holding))))
     db.clear('4 has location')
     box = db.select('isa box')
     db.add('4 has location in {}'.format(box))
